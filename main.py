@@ -1,23 +1,13 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Header, HTTPException
 import os
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-DATABASE_URL = os.getenv("DATABASE_URL")
+app = FastAPI(title="Enterprise AI Gateway")
 
 @app.get("/")
 def home():
-    return {"status": "API is online and running!"}
+    return {"status": "Enterprise AI Gateway Active"}
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+@app.post("/v1/chat/completions")
+def route_ai_request(prompt: str, api_key: str = Header(None)):
+    # Yahan aapka LLM routing logic (OpenAI / Anthropic / Local models) aayega
+    return {"model": "gpt-4o", "response": f"AI Response for: {prompt}"}
